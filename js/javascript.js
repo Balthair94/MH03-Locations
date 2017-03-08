@@ -7,3 +7,15 @@ var config = {
     messagingSenderId: "650519975440"
   	};
 firebase.initializeApp(config);
+
+function initMap() {
+        var uluru = {lat: 19.233333, lng: -103.716667};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+         position: uluru,
+        map: map
+    });
+}
