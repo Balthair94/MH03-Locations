@@ -8,14 +8,24 @@ var config = {
   	};
 firebase.initializeApp(config);
 
+var map;
+
 function initMap() {
-        var uluru = {lat: 19.233333, lng: -103.716667};
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 13,
-          center: uluru
-        });
-        var marker = new google.maps.Marker({
-         position: uluru,
-        map: map
-    });
+	var colima = {lat: 19.233333, lng: -103.716667};
+    map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 13,
+        center: colima
+       });
+
+    google.maps.event.addListener(map, 'click', function(event) {
+   		placeMarker(event.latLng);
+	});
+}
+
+
+function placeMarker(location){
+	var marker = new google.maps.Marker({
+		position: location,
+       	map: map
+    	});
 }
