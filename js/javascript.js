@@ -22,10 +22,8 @@ function initMap() {
 
     google.maps.event.addListener(map, 'click', function(event) {
    		placeMarker(event.latLng);
-   		console.log(event.latLng);
+   		console.log(event.latLng.lat() + ", " + event.latLng.lng());
 	});
-
-	//writeUserData();
 }
 
 
@@ -34,21 +32,22 @@ function placeMarker(location){
 		position: location,
        	map: map
     	});
+	writeLocationData(location.lat(), location.lng());
 }
 
-function writeUserData(){
-	var userData = {
-		username:"baltazar",
-		userage:22,
-		useremail:"archer@baltazar.com"
+function writeLocationData(lat, lng){
+	var locationData = {
+		locationID:1,
+		locationLat:lat,
+		locationLng:lng
 	};
 
 	// Get a key for a new Post.
-  	var newPostKey = database.ref().child('users').push().key;
+  	var newPostKey = database.ref().child('locations').push().key;
 
   	// Write the new post's data simultaneously in the posts list and the user's post list.
   	var updates = {};
-  	updates['/users/' + newPostKey] = userData;
+  	updates['/locations/' + newPostKey] = locationData;
 
   	database.ref().update(updates);
 }
