@@ -51,3 +51,33 @@ function writeLocationData(lat, lng){
 
   	database.ref().update(updates);
 }
+
+function gotData(data) {
+	console.log(data);
+
+	var query = database.ref("locations");
+
+	if (query != null) {
+		query.once("value").then(function(snapshot) {
+			if (snapshot.val() == null) {console.log("NO DATA")}
+    		snapshot.forEach(function(childSnapshot) {
+      		var id = childSnapshot.child("locationID").val();
+      		var lat = childSnapshot.child("locationLat").val();
+      		var lng = childSnapshot.child("locationLng").val();
+      		showMarker(id, lat, lng);
+      		console.log("ID: " + id);
+  			});
+		});
+	} else {
+		console.log("NO LOCATIONS");
+	}
+	
+}
+
+function showMarker(id, latitude, longitude) {
+	var marker = new google.maps.Marker({
+		position: {lat: latitude, lng: longitude},
+		title: "hola",
+       	map: map
+    	});
+}
