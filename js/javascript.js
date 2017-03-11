@@ -13,6 +13,8 @@ var database = firebase.database();
 
 var map;
 
+var arrayLocations = new Array();
+
 function initMap() {
 	var colima = {lat: 19.233333, lng: -103.716667};
     map = new google.maps.Map(document.getElementById('map'), {
@@ -22,7 +24,6 @@ function initMap() {
 
     google.maps.event.addListener(map, 'click', function(event) {
    		placeMarker(event.latLng);
-   		console.log(event.latLng.lat() + ", " + event.latLng.lng());
 	});
 }
 
@@ -36,48 +37,68 @@ function placeMarker(location){
 }
 
 function writeLocationData(lat, lng){
+	var tempID = getID();
+	showInConsole(tempID);
+
 	var locationData = {
-		locationID:1,
+		locationID:tempID,
 		locationLat:lat,
 		locationLng:lng
 	};
 
-	// Get a key for a new Post.
   	var newPostKey = database.ref().child('locations').push().key;
 
-  	// Write the new post's data simultaneously in the posts list and the user's post list.
   	var updates = {};
   	updates['/locations/' + newPostKey] = locationData;
 
   	database.ref().update(updates);
+
+  	addLocationToArray(locationData);
+}
+
+function getID() {
+	if (arrayLocations.length == 0) {return 1}
+	else{return arrayLocations.length + 1}
 }
 
 function gotData(data) {
 	console.log(data);
 
 	var query = database.ref("locations");
+	
+	query.once("value").then(function(snapshot) {
+		if (snapshot.val() == null) {console.log("NO DATA")}
+		else {
+				snapshot.forEach(function(childSnapshot) {
+     			var location_id = childSnapshot.child("locationID").val();
+      			var location_lat = childSnapshot.child("locationLat").val();
+      			var location_lng = childSnapshot.child("locationLng").val();
 
-	if (query != null) {
-		query.once("value").then(function(snapshot) {
-			if (snapshot.val() == null) {console.log("NO DATA")}
-    		snapshot.forEach(function(childSnapshot) {
-      		var id = childSnapshot.child("locationID").val();
-      		var lat = childSnapshot.child("locationLat").val();
-      		var lng = childSnapshot.child("locationLng").val();
-      		showMarker(id, lat, lng);
-      		console.log("ID: " + id);
-  			});
+      			var locationData = {
+					locationID:location_id,
+					locationLat:location_lat,
+					locationLng:location_lng
+				};
+
+      			addLocationToArray(locationData);
+      			showMarker(location_id, location_lat, location_lng);
+  				});
+			}
 		});
-	} else {
-		console.log("NO LOCATIONS");
-	}
 	
 }
 
 function showMarker(id, latitude, longitude) {
 	var marker = new google.maps.Marker({
 		position: {lat: latitude, lng: longitude},
-		title: "hola",
        	map: map
     	});
+}
+
+function addLocationToArray(locationObject) {
+	arrayLocations.push(locationObject);
+}
+
+function showInConsole(argument) {
+	console.log(argument);
 }
