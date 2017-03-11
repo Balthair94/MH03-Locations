@@ -38,7 +38,6 @@ function placeMarker(location){
 
 function writeLocationData(lat, lng){
 	var tempID = getID();
-	showInConsole(tempID);
 
 	var locationData = {
 		locationID:tempID,
@@ -53,36 +52,36 @@ function writeLocationData(lat, lng){
 
   	database.ref().update(updates);
 
-  	addLocationToArray(locationData);
+  	addLocationToArray(locationData);  	
 }
 
 function getID() {
 	if (arrayLocations.length == 0) {return 1}
-	else{return arrayLocations.length + 1}
+	else {return arrayLocations.length + 1}
 }
 
 function gotData(data) {
-	console.log(data);
-
 	var query = database.ref("locations");
 	
 	query.once("value").then(function(snapshot) {
 		if (snapshot.val() == null) {console.log("NO DATA")}
 		else {
 				snapshot.forEach(function(childSnapshot) {
-     			var location_id = childSnapshot.child("locationID").val();
-      			var location_lat = childSnapshot.child("locationLat").val();
-      			var location_lng = childSnapshot.child("locationLng").val();
+	     			var location_id = childSnapshot.child("locationID").val();
+	      			var location_lat = childSnapshot.child("locationLat").val();
+	      			var location_lng = childSnapshot.child("locationLng").val();
 
-      			var locationData = {
-					locationID:location_id,
-					locationLat:location_lat,
-					locationLng:location_lng
-				};
+	      			var locationData = {
+							locationID:location_id,
+							locationLat:location_lat,
+							locationLng:location_lng
+						};
 
-      			addLocationToArray(locationData);
-      			showMarker(location_id, location_lat, location_lng);
+	      			addLocationToArray(locationData);
+	      			showMarker(location_id, location_lat, location_lng);
   				});
+
+  				if (isArrayAvailable()) {drawPolyline(getCoordinatesArray());}
 			}
 		});
 	
@@ -90,15 +89,50 @@ function gotData(data) {
 
 function showMarker(id, latitude, longitude) {
 	var marker = new google.maps.Marker({
-		position: {lat: latitude, lng: longitude},
-       	map: map
+			position: {lat: latitude, lng: longitude},
+	       	map: map
     	});
 }
 
 function addLocationToArray(locationObject) {
 	arrayLocations.push(locationObject);
+	if (isArrayAvailable()) {drawPolyline(getLastCoordinates());}
 }
 
-function showInConsole(argument) {
-	console.log(argument);
+function drawPolyline(points) {
+	var path = new google.maps.Polyline({
+	    	path: points,
+	    	geodesic: true,
+	    	strokeColor: '#FFDE50',
+	    	strokeOpacity: 1.0,
+	    	strokeWeight: 2
+	  	});
+  	path.setMap(map);
+}
+
+function getCoordinatesArray() {
+	var arrayCoordinates = new Array();
+	for (var i = 0; i < arrayLocations.length; i++) {
+		var object = {lat: arrayLocations[i].locationLat, lng:arrayLocations[i].locationLng};
+		arrayCoordinates.push(object);
+	}
+	return arrayCoordinates;
+}
+
+function getLastCoordinates() {
+	var arrayCoordinates = new Array();
+	var lastElement = arrayLocations[arrayLocations.length-1];
+	var object = {lat:lastElement.locationLat, lng:lastElement.locationLng};
+	arrayCoordinates.push(object);
+
+	lastElement = arrayLocations[arrayLocations.length-2];
+	object = {lat:lastElement.locationLat, lng:lastElement.locationLng};
+	arrayCoordinates.push(object);
+
+	return arrayCoordinates;
+}
+
+function isArrayAvailable() {
+	if (arrayLocations.length >= 2) {return true;}
+	else {return false;}
 }
