@@ -13,7 +13,9 @@ var database = firebase.database();
 
 var map;
 
-var arrayLocations = new Array();
+var arrayLocations = new Array(); //LOCATIONS IN THE DATABASE
+var markers = new Array(); //MARKES IN THE MAP
+var flightPath = new Array(); //POLYLINES IN THE MAP
 
 function initMap() {
 	var colima = {lat: 19.233333, lng: -103.716667};
@@ -33,6 +35,7 @@ function placeMarker(location){
 		position: location,
        	map: map
     	});
+	markers.push(marker);
 	writeLocationData(location.lat(), location.lng());
 }
 
@@ -92,6 +95,7 @@ function showMarker(id, latitude, longitude) {
 			position: {lat: latitude, lng: longitude},
 	       	map: map
     	});
+	markers.push(marker);
 }
 
 function addLocationToArray(locationObject) {
@@ -103,11 +107,12 @@ function drawPolyline(points) {
 	var path = new google.maps.Polyline({
 	    	path: points,
 	    	geodesic: true,
-	    	strokeColor: '#FFDE50',
+	    	strokeColor: '#FF0000',
 	    	strokeOpacity: 1.0,
 	    	strokeWeight: 2
 	  	});
   	path.setMap(map);
+  	flightPath.push(path);
 }
 
 function getCoordinatesArray() {
@@ -135,4 +140,30 @@ function getLastCoordinates() {
 function isArrayAvailable() {
 	if (arrayLocations.length >= 2) {return true;}
 	else {return false;}
+}
+
+function cleanMap(){
+	//DELETE CONTENT IN DATABASE
+	database.ref().child('locations').remove();
+
+	//CLEAN MAP
+	deleteMarkers();
+	deletePolylines();
+
+	//CLEAN ARRYALOCATIONS
+	arrayLocations = new Array();
+	console.log("Map cleaned");
+}
+
+function deleteMarkers() {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
+}
+
+function deletePolylines() {
+	for(var i = 0; i < flightPath.length; i++){
+		var path = flightPath[i];
+		path.setMap(null);
+	}
 }
