@@ -8,7 +8,6 @@
 	<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-
 	<header>
 		<section id="background">
 			<h1>MH My Locations </h1>
@@ -19,32 +18,40 @@
 			</div>
 		</section>
 	</header>
-
-	<div class="container">
-		<div id="map"></div>
-	</div>
-
-	<div class="container">
-		<button class="es el diseño para el boton" onclick="cleanMap()"> Clean Map</button>
-	</div>
-
-	<script src="https://www.gstatic.com/firebasejs/3.7.0/firebase.js"></script>
+	<section id="mapSection" class="container">
+		<h1>Set you mark!!</h1>
+		<div id="mapContent">
+			<div id="map"></div>
+			<button id="mapButton" onclick="cleanMap()"> Clean Map</button>
+		</div>
+			<div class="table-responsive" >
+				<table class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Mark 1</th>
+							<th>Mark 2</th>
+							<th>Distace</th>
+						</tr>
+					</thead>
+					<tbody id="tableContent"></tbody>
+				</table>
+			</div>
+	</section>
+  <footer>
+	  <div class="contenedor">
+	  	<h1>HelloTeam@team.com</h1>
+	  	<p>3121234567 / 31212376354</p>
+	  	<div id="sociales">
+	  	<img src="imagenes/facebook.png">
+	  	<img src="imagenes/github.png">
+	  	<img src="imagenes/twitter.png">
+	  </div>
+  </footer>
+  	<script src="https://www.gstatic.com/firebasejs/3.7.0/firebase.js"></script>
 	<script src="js/javascript.js" ></script>
 	<script src="https://mhlocationdatabase-e7c61.firebaseio.com/locations.json?callback=gotData"></script>
 	<script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB56d0bJNOO2zOUMmETPOJ5g_8L_m0iZe4&callback=initMap">
   </script>
-
-  <footer>
-  <div class="contenedor">
-  	<h1>HelloTeam@team.com</h1>
-  	<p>3121234567 / 31212376354</p>
-  	<div id="sociales">
-  	<img src="imagenes/facebook.png">
-  	<img src="imagenes/github.png">
-  	<img src="imagenes/twitter.png">
-
-  	</div>
-  </footer>
 </body>
 </html>
