@@ -8,22 +8,35 @@
 	<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-	<h1 class="container">Hola mundo</h1>
-
-	<div class="container">
+<header>
+	<section id="background">
+		<h1>MH My Locations</h1>
+	</section>
+</header>
+<section id="mapSection" class="container">
 		<div id="map"></div>
-	</div>
-
-	<div class="container">
-		<button class="es el diseño para el boton"> Clean Map</button>
-
-	</div>
-
+			<div class="table-responsive" >
+				<table class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Mark 1</th>
+							<th>Mark 2</th>
+							<th>Distace</th>
+						</tr>
+					</thead>
+					<tbody id="tableContent"></tbody>
+				</table>
+			</div>
+</section>
+<footer>
+	<h1>Aqui va tu trabajo maribel</h1>
+</footer>	
 	<script src="https://www.gstatic.com/firebasejs/3.7.0/firebase.js"></script>
 	<script src="js/javascript.js" ></script>
 	<script src="https://mhlocationdatabase-e7c61.firebaseio.com/locations.json?callback=gotData"></script>
 	<script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB56d0bJNOO2zOUMmETPOJ5g_8L_m0iZe4&callback=initMap">
   </script>
+  <script src="js/angular.min.js" ></script>
 </body>
 </html>

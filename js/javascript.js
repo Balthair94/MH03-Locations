@@ -13,7 +13,7 @@ var database = firebase.database();
 
 var map;
 
-var arrayLocations = new Array();
+var arrayLocations = new Array(); //Aqui se encuentran los marcadores.
 
 function initMap() {
 	var colima = {lat: 19.233333, lng: -103.716667};
@@ -77,11 +77,10 @@ function gotData(data) {
 							locationLng:location_lng
 						};
 
-	      			addLocationToArray(locationData);
+	      			arrayLocations.push(locationData);
 	      			showMarker(location_id, location_lat, location_lng);
   				});
-
-  				if (isArrayAvailable()) {drawPolyline(getCoordinatesArray());}
+  				if (isArrayAvailable()) {drawPolyline(getCoordinatesArray());tableData();}
 			}
 		});
 	
@@ -96,7 +95,7 @@ function showMarker(id, latitude, longitude) {
 
 function addLocationToArray(locationObject) {
 	arrayLocations.push(locationObject);
-	if (isArrayAvailable()) {drawPolyline(getLastCoordinates());}
+	if (isArrayAvailable()) {drawPolyline(getLastCoordinates()); addLocationToTable();}
 }
 
 function drawPolyline(points) {
@@ -136,3 +135,76 @@ function isArrayAvailable() {
 	if (arrayLocations.length >= 2) {return true;}
 	else {return false;}
 }
+
+function tableData() {
+	var tBodyContent = document.getElementById("tableContent");
+		//Marks
+	for(var i = 0; i < arrayLocations.length -1; i++){
+		var objectA = arrayLocations[i];
+		var objectB = arrayLocations[i+1];
+
+		var tr = createRecord(objectA, objectB);
+		
+		//putting the data into table 
+		tBodyContent.appendChild(tr);
+	}
+}
+
+function getDistance(pointA, pointB) {
+		var rad = function(x) {
+  			return x * Math.PI / 180;
+		};
+		var EarthR = 6378137; // Earth’s mean radius in meter
+	  	var distanceLat = rad(pointB.lat - pointA.lat);
+	  	var distanceLong = rad(pointB.lng - pointA.lng);
+	  	var a = Math.sin(distanceLat / 2) * Math.sin(distanceLat / 2) +
+	    Math.cos(rad(pointA.lat)) * Math.cos(rad(pointB.lat)) *
+	    Math.sin(distanceLong / 2) * Math.sin(distanceLong / 2);
+	  	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+	  	var d = EarthR * c;
+	  	var km = d/1000;
+
+	  	return Math.round(km * 100) / 100;
+}
+
+function addLocationToTable(){
+	var tBodyContent = document.getElementById("tableContent");
+
+	var objectA = arrayLocations[arrayLocations.length-2];
+	var objectB = arrayLocations[arrayLocations.length-1];
+
+	var tr = createRecord(objectA, objectB);
+
+	tBodyContent.appendChild(tr);
+}
+
+function createRecord(objectA, objectB) {
+	var tr = document.createElement('TR');
+
+	var tdPointA = document.createElement('TD');
+	tdPointA.appendChild(document.createTextNode(objectA.locationID));
+	var tdPointB = document.createElement('TD');
+	tdPointB.appendChild(document.createTextNode(objectB.locationID));
+	var tdDistance = document.createElement('TD');
+
+	var pointA = {lat:objectA.locationLat, lng:objectA.locationLng};
+	var pointB = {lat:objectB.locationLat, lng:objectB.locationLng};
+
+	tdDistance.appendChild(document.createTextNode(getDistance(pointA,pointB) + " KM"));
+
+	tr.appendChild(tdPointA); tr.appendChild(tdPointB); tr.appendChild(tdDistance);
+	return tr;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

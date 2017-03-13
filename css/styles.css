@@ -3,3 +3,21 @@
 	height: 500px;
 	background-color: grey;
 }
+header section#background{
+	background-image: url("../images/mac-coffee2.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	height: 378px;
+}
+
+header section#background h1{
+	text-align: center;
+}
+
+header section#background figure img{
+	max-width: 300px;
+}
+
+section#mapSection{
+	padding-top: 32px;
+}
