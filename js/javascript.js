@@ -34,6 +34,7 @@ click*/
 function placeMarker(location){
 	var marker = new google.maps.Marker({
 		position: location,
+		label: getID().toString(),
        	map: map
     	});
 	markers.push(marker); //ADD MARKER TO THE ARRAY MARKERS
@@ -96,6 +97,7 @@ function gotData(data) {
 function showMarker(id, latitude, longitude) {
 	var marker = new google.maps.Marker({
 			position: {lat: latitude, lng: longitude},
+			label: id.toString(),
 	       	map: map
     	});
 	markers.push(marker);
