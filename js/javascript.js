@@ -152,7 +152,7 @@ function isArrayAvailable() {
 	if (arrayLocations.length >= 2) {return true;}
 	else {return false;}
 }
-
+//button
 function cleanMap(){
 	//DELETE CONTENT IN DATABASE
 	database.ref().child('locations').remove();
@@ -163,6 +163,15 @@ function cleanMap(){
 
 	//CLEAN ARRYALOCATIONS
 	arrayLocations = new Array();
+
+	//Delete tableContent and created again
+	document.getElementById("tableContent").remove();
+	var tParent = document.getElementById("tableParent");
+	var tBody = document.createElement("TBODY");
+	tBody.id = "tableContent";
+	tParent.appendChild(tBody);
+
+
 }
 
 /*To delete the markers it is necessary save 
