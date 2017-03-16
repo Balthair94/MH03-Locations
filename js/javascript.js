@@ -38,6 +38,7 @@ function placeMarker(location){
        	map: map
     	});
 	markers.push(marker); //ADD MARKER TO THE ARRAY MARKERS
+	markerClick(marker);
 	writeLocationData(location.lat(), location.lng());
 }
 
@@ -100,6 +101,7 @@ function showMarker(id, latitude, longitude) {
 	       	map: map
     	});
 	markers.push(marker);
+	markerClick(marker);
 }
 
 /*Saving Locations localy*/
@@ -250,3 +252,19 @@ function createRecord(objectA, objectB) {
 	tr.appendChild(tdPointA); tr.appendChild(tdPointB); tr.appendChild(tdDistance);
 	return tr;
 }
+
+var audioArray = ['firstAudio','secAudio','thAudio'];
+function markerClick(marker) {
+	marker.addListener('click', function() {
+		
+		var item = audioArray[Math.floor(Math.random()*audioArray.length)];
+		document.getElementById(item).play();
+  });
+}
+
+
+
+
+
+
+

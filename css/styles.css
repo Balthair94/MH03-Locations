@@ -74,3 +74,9 @@ section div button#mapButton{
     background-color: #2DBA7C;
     color: #fff;
 }
+section#music ul li{
+	list-style:none;
+}
+section div#wrap{
+	text-align: center;
+}
