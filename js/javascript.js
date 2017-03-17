@@ -16,6 +16,9 @@ var arrayLocations = new Array(); //LOCATIONS IN THE DATABASE
 var markers = new Array(); //MARKES IN THE MAP
 var flightPath = new Array(); //POLYLINES IN THE MAP
 
+var currentMusic = null;
+var audioArray = ['firstAudio','secAudio','thAudio'];
+
 /*Map gets loaded*/
 function initMap() {
 	var colima = {lat: 19.233333, lng: -103.716667};
@@ -253,12 +256,13 @@ function createRecord(objectA, objectB) {
 	return tr;
 }
 
-var audioArray = ['firstAudio','secAudio','thAudio'];
 function markerClick(marker) {
 	marker.addListener('click', function() {
 		
 		var item = audioArray[Math.floor(Math.random()*audioArray.length)];
-		document.getElementById(item).play();
+    if (currentMusic != null) {currentMusic.pause();}
+		currentMusic = document.getElementById(item);
+    currentMusic.play();
   });
 }
 
